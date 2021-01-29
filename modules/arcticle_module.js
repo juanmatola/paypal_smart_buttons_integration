@@ -1,20 +1,15 @@
 export default class Arcticle{
-    constructor(name, clientName, clientEmail){
+    constructor(name){
         this.name = name;
-        this.clientName = clientName;
-        this.clientEmail = clientEmail;
-        this.isPayed = false;
+        this.path = `writable/plans/${this.name}.pdf`;
+        this.isPayed = true;
     }
 
-    info(){
-        console.log('MENSAJE DESDE EL MODULO DE ARTICULO');
-        console.log('Arcticle name: ' + this.name);
-        console.log('Client name: ' + this.clientName);
-        console.log('Client email: ' + this.clientName);
-    }
+    sendTo(buyer){
+        console.log('\n--------------------------------------\n');
+        console.log(`Se envió el archivo... ${this.name} \n\nDetalles:\ndestinatario: ${buyer.name}\nemail: ${buyer.email}`);
+        console.log('\n--------------------------------------\n');
 
-    send(){
-        console.log('--------------------------------------');
-        console.log('Enviando el archivo... ' + this.name + ' \n\nDetalles:\ndestinatario: '+this.clientName+'\nemail: '+this.clientEmail);
+        //fetch(); peticion a controlador para realizar envio de articulo
     }
 }

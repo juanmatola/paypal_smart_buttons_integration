@@ -2,9 +2,9 @@ export default function initPayPalButtons(buttonsIds) {
 
     //Obtengo botones del dom
     let buttons = {
-      1 : document.getElementById(buttonsIds[0]),
-      2 : document.getElementById(buttonsIds[1]),
-      3 : document.getElementById(buttonsIds[2]),
+      0 : document.getElementById(buttonsIds[0]),
+      1 : document.getElementById(buttonsIds[1]),
+      2 : document.getElementById(buttonsIds[2]),
     };
 
     //BUTTON 1
@@ -24,13 +24,9 @@ export default function initPayPalButtons(buttonsIds) {
 
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-          //alert('Transaction completed by ' + details.payer.name.given_name + '!');
-          //console.log('Gracias ' + details.payer.name.given_name);
-          //console.log('Enviaremos tu compra a tu direccion de email: ' + details.payer.email_address);
-          //console.log(details);
 
         // Disparo evento de confirmacion de pago
-          buttons[1].dispatchEvent(
+          buttons[0].dispatchEvent(
             new CustomEvent('onapprove', {
               detail:{
                 'name' : details.payer.name.given_name,
@@ -65,7 +61,7 @@ export default function initPayPalButtons(buttonsIds) {
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
           // Disparo evento de confirmacion de pago
-          buttons[2].dispatchEvent(
+          buttons[1].dispatchEvent(
             new CustomEvent('onapprove', {
               detail:{
                 'name' : details.payer.name.given_name,
@@ -100,7 +96,7 @@ export default function initPayPalButtons(buttonsIds) {
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
           // Disparo evento de confirmacion de pago
-          buttons[3].dispatchEvent(
+          buttons[2].dispatchEvent(
             new CustomEvent('onapprove', {
               detail:{
                 'name' : details.payer.name.given_name,
