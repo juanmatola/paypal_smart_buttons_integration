@@ -1,115 +1,56 @@
-export default function initPayPalButtons(buttonsIds) {
+export default function initPayPalButtons(buttons_config) {
 
-    //Obtengo botones del dom
-    let buttons = {
-      0 : document.getElementById(buttonsIds[0]),
-      1 : document.getElementById(buttonsIds[1]),
-      2 : document.getElementById(buttonsIds[2]),
-    };
+    for (const button in buttons_config) {
+      if (Object.hasOwnProperty.call(buttons_config, button)) {
+        const element = buttons_config[button];
+          
+        /* Paypal Button */
 
-    //BUTTON 1
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'buynow',
-      },
-
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{"amount":{"currency_code":"EUR","value":30}}]
-        });
-      },
-
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-
-        // Disparo evento de confirmacion de pago
-          buttons[0].dispatchEvent(
-            new CustomEvent('onapprove', {
-              detail:{
-                'name' : details.payer.name.given_name,
-                'email': details.payer.email_address,
-              }
-            })
-          );
-
-        });
-      },
-
-      onError: function(err) {
-        console.log(err);
-      }
-    }).render('#'+buttonsIds[0]);
+        paypal.Buttons({
+          style: {
+            shape: 'pill',
+            color: 'gold',
+            layout: 'vertical',
+            label: 'buynow',
+          },
     
-    //BUTTON 2
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'buynow',
-      },
-
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{"amount":{"currency_code":"EUR","value":30}}]
-        });
-      },
-
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          // Disparo evento de confirmacion de pago
-          buttons[1].dispatchEvent(
-            new CustomEvent('onapprove', {
-              detail:{
-                'name' : details.payer.name.given_name,
-                'email': details.payer.email_address,
-              }
-            })
-          );
-
-        });
-      },
-
-      onError: function(err) {
-        console.log(err);
-      }
-    }).render('#'+buttonsIds[1]);
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                "amount": { 
+                            "currency_code": "EUR", 
+                            "value": element.price
+                          }}]
+            });
+          },
     
-    //BUTTON 3
-    paypal.Buttons({
-      style: {
-        shape: 'pill',
-        color: 'gold',
-        layout: 'vertical',
-        label: 'buynow',
-      },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+    
+            // Disparo evento de confirmacion de pago
+              window.dispatchEvent(
+                new CustomEvent('approved_pay', {
+                  detail:{
+                    'customer':{
+                        'name' : details.payer.name.given_name,
+                        'email': details.payer.email_address,
+                    },
+                    'arcticle': {
+                        'name': element.name,
+                        'price': element.price,
+                    }
+                  }
+                })
+              );
+    
+            });
+          },
+    
+          onError: function(err) {
+            console.log(err);
+          }
+        }).render(`#${element.id}`);
 
-      createOrder: function(data, actions) {
-        return actions.order.create({
-          purchase_units: [{"amount":{"currency_code":"EUR","value":30}}]
-        });
-      },
-
-      onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
-          // Disparo evento de confirmacion de pago
-          buttons[2].dispatchEvent(
-            new CustomEvent('onapprove', {
-              detail:{
-                'name' : details.payer.name.given_name,
-                'email': details.payer.email_address,
-              }
-            })
-          );
-        });
-      },
-
-      onError: function(err) {
-        console.log(err);
       }
-    }).render('#'+buttonsIds[2]);
-
+    }
 }

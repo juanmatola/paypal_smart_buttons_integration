@@ -1,25 +1,20 @@
 import Sale from './modules/sale/main.js';
 import initPayPalButtons from './modules/paypal_buttons/paypal_buttons.js';
 
-let buttonsIds = ['paypal-button-1', 'paypal-button-2', 'paypal-button-3']; 
+/* -- Config -- */
+const buttons_config = {
+    button1: { id: 'paypal-button-1' , name: 'hypertrophy' , price: 10},
+    button2: { id: 'paypal-button-2' , name: 'fullbody' , price: 20},
+    button3: { id: 'paypal-button-3' , name: 'split' , price: 30},
+    button4: { id: 'paypal-button-4' , name: 'bodyweight' , price: 40},
+    button5: { id: 'paypal-button-5' , name: 'cardio' , price: 50},
+}
+/* -- Config -- */
 
-initPayPalButtons(buttonsIds);
 
-let paypalButton1 = document.getElementById('paypal-button-1');
-let paypalButton2 = document.getElementById('paypal-button-2');
-let paypalButton3 = document.getElementById('paypal-button-3');
+initPayPalButtons(buttons_config);
 
-paypalButton1.addEventListener('onapprove', (pay) =>{
-    let sale = new Sale('plan1', pay.detail);
-    sale.send();
-})
-
-paypalButton2.addEventListener('onapprove', (pay) =>{
-    let sale = new Sale('plan2', pay.detail);
-    sale.send();
-})
-
-paypalButton3.addEventListener('onapprove', (pay) =>{
-    let sale = new Sale('plan3', pay.detail);
+window.addEventListener('approved_pay', (pay) => {
+    let sale = new Sale(pay.detail);
     sale.send();
 })
